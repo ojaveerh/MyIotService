@@ -1,5 +1,4 @@
-﻿using Database.Data.Models;
-using Database.Data.Models.Auth;
+﻿using Database.Data.Models.Auth;
 using DatabaseService.Services;
 using Microsoft.AspNetCore.Mvc;
 
