@@ -26,6 +26,13 @@ namespace DatabaseService.Services
         public Task<int?> GetDeviceInsideTemperatureAsync(int deviceNr);
 
         /// <summary>
+        /// Check if device already exists
+        /// </summary>
+        /// <param name="DeviceNr"></param>
+        /// <returns></returns>
+        public Task<bool> DeviceExists(int DeviceNr);
+
+        /// <summary>
         /// Registers device to user
         /// </summary>
         /// <param name="deviceNr">Device number</param>
@@ -107,7 +114,7 @@ namespace DatabaseService.Services
 
         public async Task<bool> RegisterDeviceAsync(int deviceNr, string name, string? description, string userName, int dataId, string dataName, int minRange, int maxRange, int value)
         {
-            var isDeviceRegistred = await _context.Devices.AnyAsync(device => device.DeviceNr == deviceNr && device.Name == name);
+            var isDeviceRegistred = await DeviceExists(deviceNr);
 
             if (isDeviceRegistred)
                 return false;
@@ -146,6 +153,10 @@ namespace DatabaseService.Services
 
             return true;
         }
- 
+
+        public async Task<bool> DeviceExists(int DeviceNr)
+        {
+            return await _context.Devices.AnyAsync(device => device.DeviceNr == DeviceNr);
+        }
     }
 }

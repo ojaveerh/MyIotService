@@ -41,6 +41,10 @@ namespace DeviceApi.Controllers
         [Route("/RegisterDevice")]
         public async Task<IActionResult> RegisterDeviceAsync([FromBody] RegisterDeviceRequest registerDeviceRequest)
         {
+            var deviceExists = await _devicesService.DeviceExists(registerDeviceRequest.DeviceNr);
+            if(deviceExists == true) 
+                return BadRequest($"Device already exists");
+            
             var result = await _devicesService.RegisterDeviceAsync(
                 registerDeviceRequest.DeviceNr,
                 registerDeviceRequest.Name,
