@@ -25,9 +25,9 @@ These are:
 * Running unit tests
     * Use Visual Studio to run all unit tests at once
 
-# Note - if there are errors in APIs works - check localhost uri-s
+ Note - if there are errors in APIs works - check localhost uri-s
 
-Swagger - 
+# Swagger  
 To use APIs, it important to authorize:
 To authorise use "Bearer {token}"
 You can get token from "api/login"
