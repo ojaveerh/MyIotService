@@ -8,7 +8,7 @@ Test - Hanna Ojaveer
 .NET 8
 
 # DataService.Tests:
-Test for DataService project
+Tests for DataService project
 
 Demo works, if You use "Multiple Startup Projects"
 These are:
