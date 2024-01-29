@@ -21,15 +21,16 @@ namespace DeviceImitator
         public MainWindow()
         {
             InitializeComponent();
+
+            GetToken();
+            RegisterDevice();
+
             dispatcherTimer = new DispatcherTimer
             {
                 Interval = new TimeSpan(0, 0, 5)
             };
             dispatcherTimer.Tick += DispatcherTimer_Tick;
             dispatcherTimer.Start();
-
-            GetToken();
-            RegisterDevice();
         }
 
         private void GetToken()
@@ -43,12 +44,10 @@ namespace DeviceImitator
         private void RegisterDevice()
         {
             var client = new HttpClient();
-            var body = new { deviceNr = 123, name = "Factory device", description = "Suitable for factories", userName = "test", dataId = 1000, dataName = "Inside temperature", minRange = -150, maxRange=150, value=23 };
-            var response = client.PostAsJsonAsync("https://localhost:7047/RegisterDeviceAsync", body).Result; 
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var body = new { deviceNr = 123, name = "Factory device", description = "Suitable for factories", username = "test", dataId = 1000, dataName = "Inside temperature", minRange = -150, maxRange=150, value=23 };
+            var response = client.PostAsJsonAsync("https://localhost:7047/RegisterDevice", body).Result; 
         }
-
-        // Register device - pöördub DeviceControlleri poole registreerimiseks Post - devicenr, Name, DaeviceData
-        //kontrollib, kas on juba registreeritud kasutaja külge
 
         private async void DispatcherTimer_Tick(object? sender, EventArgs e)
         {

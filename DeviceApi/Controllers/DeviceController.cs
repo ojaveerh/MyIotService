@@ -1,4 +1,5 @@
 ﻿using DatabaseService.Services;
+using DeviceApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,9 +39,18 @@ namespace DeviceApi.Controllers
 
         [HttpPost]
         [Route("/RegisterDevice")]
-        public async Task<IActionResult> RegisterDeviceAsync(int deviceNr, string name, string? description, string username, int dataId, string dataName, int minRange, int maxRange, int value)
+        public async Task<IActionResult> RegisterDeviceAsync([FromBody] RegisterDeviceRequest registerDeviceRequest)
         {
-            var result = await _devicesService.RegisterDeviceAsync(deviceNr, name, description, username, dataId, dataName, minRange, maxRange, value);
+            var result = await _devicesService.RegisterDeviceAsync(
+                registerDeviceRequest.DeviceNr,
+                registerDeviceRequest.Name,
+                registerDeviceRequest.Description,
+                registerDeviceRequest.Username,
+                registerDeviceRequest.DataId,
+                registerDeviceRequest.DataName,
+                registerDeviceRequest.MinRange,
+                registerDeviceRequest.MaxRange,
+                registerDeviceRequest.Value);
 
             if (result == false)
             {
@@ -50,9 +60,8 @@ namespace DeviceApi.Controllers
             return Ok("Device is registred");
         }
 
-        //TODO - võtab vastu
-        // new Device { UserAccount = null, DeviceNr = 1234, Name = "Factory device", Description = "Suitable for factories" });
-        //new DeviceData { DeviceId = deviceId, DataId = 1000, Name = "Inside temperature", MinRange = -150, MaxRange = 150, Value = 22 });
+
 
     }
+
 }
