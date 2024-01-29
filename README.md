@@ -11,7 +11,7 @@ Test - Hanna Ojaveer
 Cloud/Azure service for front end clients. 
 
 # DeviceApi
-Service for direct direct communication with devices. Runs on the machine or same network as machine.
+Service for direct communication with devices. Runs on the machine or same network as machine.
 
 # DataService.Tests:
 Tests for DataService project
