@@ -18,9 +18,9 @@ Tests for DataService project
 
 # Demo works, if You use "Multiple Startup Projects" - it seems to me, that it needs to change manually
 Startup projects are:
-I  ) DeviceApi
-II ) ServiceApi
-III) DeviceImitator - must be last to Start
+* 1) DeviceApi
+* 2) ServiceApi
+* 3) DeviceImitator - must be last to Start
 
 * Building
     * Use Visual Studio to build solution.
