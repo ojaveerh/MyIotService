@@ -60,7 +60,7 @@ namespace ServiceApi.Controllers.Auth
         {
             var client = new HttpClient();
             var body = new { Username = userLogin.Username, Password = userLogin.Password };
-            var response = client.PostAsJsonAsync("https://localhost:44347/GetUserAccountsByNameAsync", body).Result;
+            var response = client.PostAsJsonAsync("https://localhost:7247/GetUserAccountsByNameAsync", body).Result;
             var user = response.Content.ReadAsStringAsync().Result;
             var result = Newtonsoft.Json.JsonConvert.DeserializeObject<UserAccount>(user);
             
