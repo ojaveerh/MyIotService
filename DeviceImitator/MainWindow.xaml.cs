@@ -75,7 +75,7 @@ namespace DeviceImitator
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
             using HttpResponseMessage response = await client.GetAsync("https://localhost:7047/Device/123/GetDeviceInsideTemperature");
 
-            var temperature = Convert.ToInt32(await response.Content.ReadAsStringAsync());
+            int.TryParse(await response.Content.ReadAsStringAsync(), out int temperature); ;
 
             thermometer.Value = temperature;
 
