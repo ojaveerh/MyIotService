@@ -1,7 +1,10 @@
-﻿using System.Net.Http;
+﻿using Database.Data.Models;
+using Newtonsoft.Json.Linq;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
 
@@ -26,16 +29,26 @@ namespace DeviceImitator
             dispatcherTimer.Start();
 
             GetToken();
+            RegisterDevice();
         }
 
         private void GetToken()
         {
             var client = new HttpClient();
             var body = new { username = "test", password = "test1" };
-            var response = client.PostAsJsonAsync("https://localhost:7247/api/Login", body).Result;
+            var response = client.PostAsJsonAsync("https://localhost:44347/api/Login", body).Result;
             
             _token = response.Content.ReadAsStringAsync().Result;
         }
+        private void RegisterDevice()
+        {
+            var client = new HttpClient();
+            var body = new { deviceNr = 123, name = "Factory device", description = "Suitable for factories", userName = "test", dataId = 1000, dataName = "Inside temperature", minRange = -150, maxRange=150, value=23 };
+            var response = client.PostAsJsonAsync("https://localhost:44372/RegisterDeviceAsync", body).Result; 
+        }
+
+        // Register device - pöördub DeviceControlleri poole registreerimiseks Post - devicenr, Name, DaeviceData
+        //kontrollib, kas on juba registreeritud kasutaja külge
 
         private async void DispatcherTimer_Tick(object? sender, EventArgs e)
         {
@@ -64,7 +77,7 @@ namespace DeviceImitator
         {
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-            using HttpResponseMessage response = await client.GetAsync("https://localhost:7047/Device/123/GetDeviceInsideTemperature");
+            using HttpResponseMessage response = await client.GetAsync("https://localhost:44372/Device/123/GetDeviceInsideTemperature");
 
             var temperature = Convert.ToInt32(await response.Content.ReadAsStringAsync());
 
@@ -84,7 +97,7 @@ namespace DeviceImitator
         {
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-            client.PostAsJsonAsync($"https://localhost:7047/Device/123/SetDeviceInsideTemperature?temperature={newTemperature}", new { });
+            client.PostAsJsonAsync($"https://localhost:44372/Device/123/SetDeviceInsideTemperature?temperature={newTemperature}", new { });
         }
 
         private void thermometer_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

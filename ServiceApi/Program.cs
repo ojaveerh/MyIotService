@@ -104,11 +104,11 @@ static void SeedDatabase(IApplicationBuilder app)
 
         if (!context.Devices.Any())
         {
-            context.Devices.Add(new Device { UserAccount = null, DeviceNr = 123, Name = "Factory device", Description = "Suitable for factories" });
+            context.Devices.Add(new Device { UserAccount = null, DeviceNr = 1234, Name = "Factory device", Description = "Suitable for factories" });
         }
         context.SaveChanges();
 
-        var deviceId = context.Devices.Where(x => x.DeviceNr == 123).Select(x => x.Id).FirstOrDefault();
+        var deviceId = context.Devices.Where(x => x.DeviceNr == 1234).Select(x => x.Id).FirstOrDefault();
 
         if (!context.DeviceDatas.Any())
         {

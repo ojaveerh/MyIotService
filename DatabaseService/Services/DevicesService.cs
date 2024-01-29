@@ -24,6 +24,21 @@ namespace DatabaseService.Services
         /// <param name="deviceNr"></param>
         /// <returns>Returns temperature in Celsius. Null, if device or device data was not found.</returns>
         public Task<int?> GetDeviceInsideTemperatureAsync(int deviceNr);
+
+        /// <summary>
+        /// Registers device to user
+        /// </summary>
+        /// <param name="deviceNr">Device number</param>
+        /// <param name="name">Device name</param>
+        /// <param name="description">Device description</param>
+        /// <param name="userId">Device owner</param>
+        /// <param name="dataId">Device data id</param>
+        /// <param name="dataName">Device data name</param>
+        /// <param name="minRange">Device data range min</param>
+        /// <param name="maxRange">Device data range max</param>
+        /// <param name="value">Device data value</param>
+        /// <returns></returns>
+        public Task<bool> RegisterDeviceAsync(int deviceNr, string name, string? description,  string userName, int dataId, string dataName, int minRange, int maxRange, int value );
     }
 
     public class DevicesService : IDevicesService
@@ -89,5 +104,48 @@ namespace DatabaseService.Services
 
             return true;
         }
+
+        public async Task<bool> RegisterDeviceAsync(int deviceNr, string name, string? description, string userName, int dataId, string dataName, int minRange, int maxRange, int value)
+        {
+            var isDeviceRegistred = await _context.Devices.AnyAsync(device => device.DeviceNr == deviceNr && device.Name == name);
+
+            if (isDeviceRegistred)
+                return false;
+
+            var user = await _context.UserAccounts.FirstOrDefaultAsync(user => user.UserName == userName);
+
+            if (user == null) { return false; }
+
+            var newDevice = new Device
+            {
+                UserAccountId = user.Id,
+                DeviceNr = deviceNr,
+                Name = name,
+                Description = description,              
+            };
+
+            await _context.Devices.AddAsync(newDevice);
+            await _context.SaveChangesAsync();
+
+            var createdDevice = await _context.Devices.FirstOrDefaultAsync(device => device.DeviceNr == deviceNr && device.Name == name);
+
+            if (createdDevice != null)
+            {
+                var newDeviceData = new DeviceData
+                {
+                    DeviceId = createdDevice.Id,
+                    DataId = dataId,
+                    Name = dataName,
+                    MinRange = minRange,
+                    MaxRange = maxRange,
+                    Value = value
+                };
+                await _context.DeviceDatas.AddAsync(newDeviceData);
+                await _context.SaveChangesAsync();
+            }
+
+            return true;
+        }
+ 
     }
 }

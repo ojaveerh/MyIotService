@@ -35,5 +35,24 @@ namespace DeviceApi.Controllers
 
             return Ok("Temperature set!");
         }
+
+        [HttpPost]
+        [Route("/RegisterDevice")]
+        public async Task<IActionResult> RegisterDeviceAsync(int deviceNr, string name, string? description, string username, int dataId, string dataName, int minRange, int maxRange, int value)
+        {
+            var result = await _devicesService.RegisterDeviceAsync(deviceNr, name, description, username, dataId, dataName, minRange, maxRange, value);
+
+            if (result == false)
+            {
+                return BadRequest($"Something went wrong!");
+            }
+
+            return Ok("Device is registred");
+        }
+
+        //TODO - võtab vastu
+        // new Device { UserAccount = null, DeviceNr = 1234, Name = "Factory device", Description = "Suitable for factories" });
+        //new DeviceData { DeviceId = deviceId, DataId = 1000, Name = "Inside temperature", MinRange = -150, MaxRange = 150, Value = 22 });
+
     }
 }
