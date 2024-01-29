@@ -31,6 +31,7 @@ namespace ServiceApi.Controllers
         [HttpPost]
         [ApiExplorerSettings(IgnoreApi = true)]
         [Route("/GetUserAccountsByNameAsync")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> GetUserAccountsByNameAsync([FromBody] UserLogin userAccount)
         {
             return Ok(await _usersService.GetUserAccountsByNameAsync(userAccount));
